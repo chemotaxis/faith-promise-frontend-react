@@ -61,10 +61,11 @@ function App() {
       </nav>
       <Grid container className="App-header">
         <Grid item xs={4}>
-          <Paper>Hi</Paper>
-        </Grid>
-        <Grid item xs={4}>
-          <Paper>Hi</Paper>
+          <Paper>
+            <p>
+              Current count: {count}
+            </p>
+          </Paper>
         </Grid>
         <Grid item xs={4}>
           <Paper>
@@ -81,6 +82,7 @@ function App() {
             </form>
           </Paper>
         </Grid>
+        <Grid item xs={4}></Grid>
       </Grid>
     </div>
   );
