@@ -71,9 +71,9 @@ function App() {
           <Paper>
             <form onSubmit={handleSubmit}>
               <div className={classes.text}>
-                <label for="display">Display total</label>
+                <label htmlFor="display">Display total</label>
                 <input type="text" id="display" name="display_total"
-                autocomplete="off" onChange={handleChange}/>
+                autoComplete="off" onChange={handleChange}/>
               </div>
               <div className="button">
                 <button type="submit">Refresh</button>
