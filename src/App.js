@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from '@reach/router';
 
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -12,7 +13,12 @@ const useStyles = makeStyles({
   }
 })
 
+const store = localStorage;
+const keys = Object.freeze({
+  'count': 'count',
+})
 
+const decimalPlaces = 2;
 /**
  * This is an app split into 3 equal columns with a form on the right side. This
  * will eventually be split into components, but I'm just playing around at the
@@ -27,13 +33,20 @@ const useStyles = makeStyles({
 function App() {
   // This uses the fairly new React hook api for adding state variables.
   const classes = useStyles();
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(
+    store.getItem(keys.count) || (0).toFixed(decimalPlaces)
+  );
+  React.useEffect(() => {
+    store.setItem(keys.count, count);
+  });
   const [displayTotal, setDisplayTotal] = useState('');
 
   function handleSubmit(event) {
     event.preventDefault();
-    setCount(count + 1);
-    alert(`Display total: ${displayTotal}\n Count: ${count}`);
+    const total = parseFloat(displayTotal).toFixed(decimalPlaces);
+    if (!isNaN(total)) {
+      setCount(total);
+    }
   }
 
   function handleChange(event) {
@@ -42,20 +55,25 @@ function App() {
 
   return (
     <div className="App">
+      <nav>
+        <Link to="/">Home</Link>
+        <Link to="display">Display</Link>
+      </nav>
       <Grid container className="App-header">
         <Grid item xs={4}>
-          <Paper>Hi</Paper>
-        </Grid>
-        <Grid item xs={4}>
-          <Paper>Hi</Paper>
+          <Paper>
+            <p>
+              Current count: {count}
+            </p>
+          </Paper>
         </Grid>
         <Grid item xs={4}>
           <Paper>
             <form onSubmit={handleSubmit}>
               <div className={classes.text}>
-                <label for="display">Display total</label>
+                <label htmlFor="display">Display total</label>
                 <input type="text" id="display" name="display_total"
-                autocomplete="off" onChange={handleChange}/>
+                autoComplete="off" onChange={handleChange}/>
               </div>
               <div className="button">
                 <button type="submit">Refresh</button>
@@ -64,6 +82,7 @@ function App() {
             </form>
           </Paper>
         </Grid>
+        <Grid item xs={4}></Grid>
       </Grid>
     </div>
   );
