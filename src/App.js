@@ -12,7 +12,12 @@ const useStyles = makeStyles({
   }
 })
 
+const store = localStorage;
+const keys = Object.freeze({
+  'count': 'count',
+})
 
+const decimalPlaces = 2;
 /**
  * This is an app split into 3 equal columns with a form on the right side. This
  * will eventually be split into components, but I'm just playing around at the
@@ -27,13 +32,20 @@ const useStyles = makeStyles({
 function App() {
   // This uses the fairly new React hook api for adding state variables.
   const classes = useStyles();
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(
+    store.getItem(keys.count) || (0).toFixed(decimalPlaces)
+  );
+  React.useEffect(() => {
+    store.setItem(keys.count, count);
+  });
   const [displayTotal, setDisplayTotal] = useState('');
 
   function handleSubmit(event) {
     event.preventDefault();
-    setCount(count + 1);
-    alert(`Display total: ${displayTotal}\n Count: ${count}`);
+    const total = parseFloat(displayTotal).toFixed(decimalPlaces);
+    if (!isNaN(total)) {
+      setCount(total);
+    }
   }
 
   function handleChange(event) {
