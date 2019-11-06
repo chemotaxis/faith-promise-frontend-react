@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from '@reach/router';
 
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -54,6 +55,10 @@ function App() {
 
   return (
     <div className="App">
+      <nav>
+        <Link to="/">Home</Link>
+        <Link to="display">Display</Link>
+      </nav>
       <Grid container className="App-header">
         <Grid item xs={4}>
           <Paper>Hi</Paper>
