@@ -59,6 +59,16 @@ function App() {
     setNewTotal(event.target.value);
   }
 
+  /**
+   * handleClick opens resource in a new tab
+   * @param {event} event click event
+   */
+  function handleClick(event) {
+    event.preventDefault();
+    const el = document.getElementById("display-button");
+    const href = el.attributes.href.value;
+    window.open(href, "displayTab", "noreferrer");
+  }
   return (
     <div className="App">
       <Button id="display-button" size="large" variant="outlined"
