@@ -47,6 +47,11 @@ function App() {
   });
   const [newTotal, setNewTotal] = useState('');
 
+  /**
+   * handleSubmit converts the form data into a new number for the current tally
+   *
+   * @param {event} event form submit event
+   */
   function handleSubmit(event) {
     event.preventDefault();
     const total = parseFloat(newTotal).toFixed(storagePrecision);
@@ -55,6 +60,10 @@ function App() {
     }
   }
 
+  /**
+   * handleChange handles changes in form input and stores new data as a string
+   * @param {event} event form change event
+   */
   function handleChange(event) {
     setNewTotal(event.target.value);
   }
