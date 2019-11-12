@@ -18,10 +18,11 @@ const useStyles = makeStyles({
 
 const store = localStorage;
 const keys = Object.freeze({
-  'count': 'count',
+  'displayTotal': 'displayTotal',
 })
 
-const decimalPlaces = 2;
+// Number of decimal places to parse
+const storagePrecision = 0;
 /**
  * This is an app split into 3 equal columns with a form on the right side. This
  * will eventually be split into components, but I'm just playing around at the
@@ -36,24 +37,26 @@ const decimalPlaces = 2;
 function App() {
   // This uses the fairly new React hook api for adding state variables.
   const classes = useStyles();
-  const [count, setCount] = useState(
-    store.getItem(keys.count) || (0).toFixed(decimalPlaces)
+
+  // displayTotal is a string that holds
+  const [displayTotal, setDisplayTotal] = useState(
+    store.getItem(keys.displayTotal) || (0).toFixed(storagePrecision)
   );
   React.useEffect(() => {
-    store.setItem(keys.count, count);
+    store.setItem(keys.displayTotal, displayTotal);
   });
-  const [displayTotal, setDisplayTotal] = useState('');
+  const [newTotal, setNewTotal] = useState('');
 
   function handleSubmit(event) {
     event.preventDefault();
-    const total = parseFloat(displayTotal).toFixed(decimalPlaces);
+    const total = parseFloat(newTotal).toFixed(storagePrecision);
     if (!isNaN(total)) {
-      setCount(total);
+      setDisplayTotal(total);
     }
   }
 
   function handleChange(event) {
-    setDisplayTotal(event.target.value);
+    setNewTotal(event.target.value);
   }
 
   return (
@@ -68,7 +71,7 @@ function App() {
         <Grid item xs={4}>
           <Paper>
             <p>
-              Current count: {count}
+              Displayed total: ${displayTotal}
             </p>
             <form onSubmit={handleSubmit} autoComplete="off">
               <div className={classes.text}>
