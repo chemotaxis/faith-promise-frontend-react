@@ -3,7 +3,10 @@ import { Link } from '@reach/router';
 
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
+
 import './App.css';
 
 const useStyles = makeStyles({
@@ -55,30 +58,25 @@ function App() {
 
   return (
     <div className="App">
-      <nav>
-        <Link to="/">Home</Link>
-        <Link to="display">Display</Link>
-      </nav>
-      <Grid container className="App-header">
+      <Button id="display-button" size="large" variant="outlined"
+      component={Link} to="display"
+      onClick={handleClick}>
+        Show display
+      </Button>
+      <Grid container className="App-body">
+        <Grid item xs={4}></Grid>
         <Grid item xs={4}>
           <Paper>
             <p>
               Current count: {count}
             </p>
-          </Paper>
-        </Grid>
-        <Grid item xs={4}>
-          <Paper>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} autoComplete="off">
               <div className={classes.text}>
-                <label htmlFor="display">Display total</label>
-                <input type="text" id="display" name="display_total"
-                autoComplete="off" onChange={handleChange}/>
+                <TextField id="display" label="New total"
+                  variant="outlined" onChange={handleChange}
+                />
               </div>
-              <div className="button">
-                <button type="submit">Refresh</button>
-              </div>
-
+              <Button type="submit" color="primary" fullWidth>Refresh</Button>
             </form>
           </Paper>
         </Grid>
