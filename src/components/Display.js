@@ -5,21 +5,21 @@ import 'odometer/themes/odometer-theme-default.css'
 
 const store = localStorage;
 const keys = Object.freeze({
-  'count': 'count',
+  'displayTotal': 'displayTotal',
 })
 
 function Display() {
-  const [count, setCount] = useState(
-    store.getItem(keys.count) || 0
+  const [displayTotal, setDisplayTotal] = useState(
+    store.getItem(keys.displayTotal) || 0
   );
   React.useEffect(() => {
     setInterval(() => {
-      const c = store.getItem(keys.count);
-      if (c !== count) {
-        setCount(c);
+      const c = store.getItem(keys.displayTotal);
+      if (c !== displayTotal) {
+        setDisplayTotal(c);
       }
     }, 200)
-  }, [count]);
+  }, [displayTotal]);
 
   return (
     <div className="Display" style={{
