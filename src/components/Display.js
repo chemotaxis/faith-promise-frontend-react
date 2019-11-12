@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Link } from '@reach/router';
 import Odometer from 'react-odometerjs-no-prop-types';
 import 'odometer/themes/odometer-theme-default.css'
+
+import './Display.css';
 
 const store = localStorage;
 const keys = Object.freeze({
@@ -23,21 +24,25 @@ function Display() {
 
   return (
     <div className="Display" style={{
+      minHeight: "90vh",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
+      justifyContent: "center",
       }}>
-      <nav>
-        <Link to="/">Home</Link>
-      </nav>
-      <h1>Faith Promise 2019</h1>
-      <h2 style={{display: "flex"}}>
-        <div className="odometer-auto-theme">$</div>
-        <Odometer value={count} options={{
+      <div style={{ fontSize: "60px", fontWeight: "500",}}>
+        Faith Promise 2019
+      </div>
+      <div style={{
+      display: "flex",
+      fontSize: "250px",
+      fontWeight: "500",}}>
+        <span className="odometer-digit">$</span>
+        <Odometer value={displayTotal} options={{
           format:'(,ddd)',
           duration: 3000,
         }}/>
-      </h2>
+      </div>
     </div>
   )
 }
