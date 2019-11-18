@@ -31,7 +31,7 @@ function Display() {
       justifyContent: "center",
       }}>
       <div style={{ fontSize: "60px", fontWeight: "500",}}>
-        Faith Promise 2019
+        Faith Promise 2020
       </div>
       <div style={{
       display: "flex",
