@@ -19,6 +19,7 @@ const useStyles = makeStyles({
 const store = localStorage;
 const keys = Object.freeze({
   'displayTotal': 'displayTotal',
+  'title': 'title',
 })
 
 // Number of decimal places to parse
@@ -42,9 +43,14 @@ function App() {
   const [displayTotal, setDisplayTotal] = useState(
     store.getItem(keys.displayTotal) || (0).toFixed(storagePrecision)
   );
+
+  const [title, setTitle] = useState('Faith Promise 2021');
+
   React.useEffect(() => {
     store.setItem(keys.displayTotal, displayTotal);
+    store.setItem(keys.title, title);
   });
+
   const [newTotal, setNewTotal] = useState('');
 
   /**
@@ -78,6 +84,15 @@ function App() {
     const href = el.attributes.href.value;
     window.open(href, "displayTab", "noreferrer");
   }
+
+  function handleChangeTitle(event) {
+    setTitle(event.target.value);
+  }
+
+  function handleSubmitTitle(event) {
+    event.preventDefault();
+  }
+
   return (
     <div className="App">
       <Button id="display-button" size="large" variant="outlined"
@@ -89,6 +104,12 @@ function App() {
         <Grid item xs={4}></Grid>
         <Grid item xs={4}>
           <Paper>
+            <form onSubmit={handleSubmitTitle} autoComplete="off">
+              <TextField className={classes.text} id="title" label="Title"
+                variant="outlined" value={title}
+                onChange={handleChangeTitle}
+              />
+            </form>
             <p>
               Displayed total: ${displayTotal}
             </p>

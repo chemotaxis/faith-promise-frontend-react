@@ -7,18 +7,26 @@ import './Display.css';
 const store = localStorage;
 const keys = Object.freeze({
   'displayTotal': 'displayTotal',
+  'title': 'title',
 })
 
 function Display() {
   const [displayTotal, setDisplayTotal] = useState(
     store.getItem(keys.displayTotal) || 0
   );
+
+  const [title, setTitle] = useState(
+    store.getItem(keys.title) || ''
+  );
+
   React.useEffect(() => {
     setInterval(() => {
       const c = store.getItem(keys.displayTotal);
       if (c !== displayTotal) {
         setDisplayTotal(c);
       }
+
+      setTitle(store.getItem(keys.title))
     }, 200)
   }, [displayTotal]);
 
@@ -31,7 +39,7 @@ function Display() {
       justifyContent: "center",
       }}>
       <div style={{ fontSize: "60px", fontWeight: "500",}}>
-        Faith Promise 2020
+        {title}
       </div>
       <div style={{
       display: "flex",
