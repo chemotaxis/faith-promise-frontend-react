@@ -85,7 +85,9 @@ export default class FIREWORKS {
     }
 
     stop() {
-      this.pixi.ticker.stop();
+    //   this.pixi.ticker.stop();
+      const nodes = document.getElementsByTagName('canvas');
+      nodes.item(0).remove();
     }
 
     restart() {

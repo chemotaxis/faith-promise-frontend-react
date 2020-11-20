@@ -29,7 +29,7 @@ function FireworksButton() {
     });
 
     fireworks.start_burst();
-    setTimeout(fireworks.stop, 3000);
+    setTimeout(fireworks.stop, 5000);
 
   }
 
