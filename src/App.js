@@ -6,12 +6,38 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
+import * as PIXI from 'pixi.js';
+import FIREWORKS from './components/fireworks'
 
 import './App.css';
 
 function Spacer({height}) {
   return (
     <div style={{height: height}}/>
+  )
+}
+
+
+function FireworksButton() {
+  if (!PIXI.utils.isWebGLSupported()) return;
+
+  function handleSubmit() {
+    const fireworks = new FIREWORKS({
+      full_screen: true,
+      target_node: null,
+      amount: 5
+    });
+
+    fireworks.start_burst();
+    setTimeout(fireworks.stop, 3000);
+
+  }
+
+
+  return (
+    <Button onClick={handleSubmit} type="submit" color="primary" fullWidth>
+      Fireworks!
+    </Button>
   )
 }
 
@@ -131,6 +157,9 @@ function App() {
             </form>
           </Paper>
           <Spacer height="10vh"/>
+          <Paper>
+            <FireworksButton/>
+          </Paper>
         </Grid>
         <Grid item xs={4}></Grid>
       </Grid>
