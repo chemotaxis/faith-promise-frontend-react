@@ -9,6 +9,12 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import './App.css';
 
+function Spacer({height}) {
+  return (
+    <div style={{height: height}}/>
+  )
+}
+
 const useStyles = makeStyles({
   text: {
     display: 'flex',
@@ -95,6 +101,7 @@ function App() {
 
   return (
     <div className="App">
+      <Spacer height="2vh"/>
       <Button id="display-button" size="large" variant="outlined"
       component={Link} to="display"
       onClick={handleClick}>
@@ -103,6 +110,7 @@ function App() {
       <Grid container className="App-body">
         <Grid item xs={4}></Grid>
         <Grid item xs={4}>
+          <Spacer height="15vh"/>
           <Paper>
             <form onSubmit={handleSubmitTitle} autoComplete="off">
               <TextField className={classes.text} id="title" label="Title"
@@ -122,6 +130,7 @@ function App() {
               <Button type="submit" color="primary" fullWidth>Refresh</Button>
             </form>
           </Paper>
+          <Spacer height="10vh"/>
         </Grid>
         <Grid item xs={4}></Grid>
       </Grid>
