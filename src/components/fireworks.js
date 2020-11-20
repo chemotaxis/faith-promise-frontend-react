@@ -30,7 +30,7 @@ export default class FIREWORKS {
       this.SPARK_TIME = 2500;
       this.SLEEP_TIME = 5000;
 
-      this.BACKGROUND = "rgb(0, 0, 0)";
+      this.BACKGROUND = "rgba(0, 0, 0, 0)";
       this.RESIDUAL = "rgba(0, 0, 0, 0.1)";
 
       this.ctx = document.createElement("canvas").getContext("2d");
