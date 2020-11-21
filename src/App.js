@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from '@reach/router';
 
 import Grid from '@material-ui/core/Grid';
@@ -6,8 +6,6 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
-import * as PIXI from 'pixi.js';
-import FIREWORKS from './components/fireworks'
 
 import './App.css';
 
@@ -17,29 +15,6 @@ function Spacer({height}) {
   )
 }
 
-
-function FireworksButton() {
-  if (!PIXI.utils.isWebGLSupported()) return;
-
-  function handleSubmit() {
-    const fireworks = new FIREWORKS({
-      full_screen: true,
-      target_node: null,
-      amount: 5
-    });
-
-    fireworks.start_burst();
-    setTimeout(fireworks.stop, 5000);
-
-  }
-
-
-  return (
-    <Button onClick={handleSubmit} type="submit" color="primary" fullWidth>
-      Fireworks!
-    </Button>
-  )
-}
 
 const useStyles = makeStyles({
   text: {
@@ -52,6 +27,7 @@ const store = localStorage;
 const keys = Object.freeze({
   'displayTotal': 'displayTotal',
   'title': 'title',
+  'fireworks': 'fireworks',
 })
 
 // Number of decimal places to parse
@@ -77,13 +53,35 @@ function App() {
   );
 
   const [title, setTitle] = useState('Faith Promise 2021');
-
+  useEffect(() => {
+    store.setItem(keys.fireworks, false);
+  }, []);
   React.useEffect(() => {
     store.setItem(keys.displayTotal, displayTotal);
     store.setItem(keys.title, title);
   });
 
   const [newTotal, setNewTotal] = useState('');
+
+  function FireworksButton() {
+
+    function handleSubmit(event) {
+      event.preventDefault();
+      const total = parseFloat(newTotal).toFixed(storagePrecision);
+      if (!isNaN(total)) {
+        setDisplayTotal(total);
+      }
+      let trigger = store.getItem(keys.fireworks)
+      trigger = trigger === 'true'? false: true;
+      store.setItem(keys.fireworks, trigger);
+    }
+
+    return (
+      <Button onClick={handleSubmit} type="submit" color="primary" fullWidth>
+        Fireworks!
+      </Button>
+    )
+  }
 
   /**
    * handleSubmit converts the form data into a new number for the current tally

@@ -1,7 +1,19 @@
 import * as PIXI from 'pixi.js';
 
-export default class FIREWORKS {
+export function handleFireworks(params) {
+  if (!PIXI.utils.isWebGLSupported()) return;
+  const fireworks = new FIREWORKS(params);
+
+  fireworks.start_burst();
+  setTimeout(fireworks.stop, 5000);
+};
+
+export class FIREWORKS {
     constructor({full_screen=false, target_node, amount=5}) {
+      if (!PIXI.utils.isWebGLSupported()) {
+        console.log('WebGL not supported');
+        return;
+      }
       this._set_inner_classes();
 
       this.make_full = full_screen;
@@ -30,8 +42,8 @@ export default class FIREWORKS {
       this.SPARK_TIME = 2500;
       this.SLEEP_TIME = 5000;
 
-      this.BACKGROUND = "rgba(211, 211, 211, 1)";
-      this.RESIDUAL = "rgba(211, 211, 211, 0)";
+      this.BACKGROUND = "rgba(0, 0, 0, 0)";
+      this.RESIDUAL = "rgba(0, 0, 0, 0.05)";
 
       this.ctx = document.createElement("canvas").getContext("2d");
       [this.ctx.canvas.width, this.ctx.canvas.height]
@@ -43,6 +55,10 @@ export default class FIREWORKS {
       } else {
         this.ctx.canvas.style.margin = 0;
         this.ctx.canvas.style.padding = 0;
+        this.ctx.canvas.style.position = 'absolute';
+        this.ctx.canvas.style.top = 0;
+        this.ctx.canvas.style.left = 0;
+        this.ctx.canvas.style.zIndex = -1;
       }
       this.target_node.appendChild(this.ctx.canvas);
 
@@ -473,6 +489,7 @@ export default class FIREWORKS {
         height:100%;
       }
       canvas {
+        z-index: -1;
         position:absolute;
         top:0;
         left:0;
