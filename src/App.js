@@ -9,13 +9,6 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import './App.css';
 
-function Spacer({height}) {
-  return (
-    <div style={{height: height}}/>
-  )
-}
-
-
 const useStyles = makeStyles({
   text: {
     display: 'flex',
@@ -32,6 +25,14 @@ const keys = Object.freeze({
 
 // Number of decimal places to parse
 const storagePrecision = 0;
+
+function Spacer({height}) {
+  return (
+    <div style={{height: height}}/>
+  )
+}
+
+
 /**
  * This is an app split into 3 equal columns with a form on the right side. This
  * will eventually be split into components, but I'm just playing around at the
