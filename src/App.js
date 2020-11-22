@@ -63,10 +63,8 @@ function DisplayButton() {
 }
 
 function TitleForm(props) {
-  const classes = useStyles();
 
   function handleChangeTitle(event) {
-    console.log('Change title');
     props.updateMethod(event.target.value);
   }
 
@@ -77,9 +75,9 @@ function TitleForm(props) {
   return (
     <form onSubmit={handleSubmitTitle} autoComplete="off">
       <TextField
+        fullWidth
         value={props.value}
         onChange={handleChangeTitle}
-        className={classes.text}
         id="title"
         label="Title"
         variant="outlined"
@@ -88,6 +86,68 @@ function TitleForm(props) {
   )
 }
 
+function TotalForm(props) {
+  const classes = useStyles();
+  // newTotal is the new total that has *not* been submitted to the display page
+  const [newTotal, setNewTotal] = useState('');
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    props.updateDisplayTotal(newTotal);
+  }
+
+  function handleChange(event) {
+    setNewTotal(event.target.value);
+  }
+
+  return (
+    <form className={classes.text} onSubmit={handleSubmit} autoComplete="off">
+      <TextField id="display" label="New total"
+        variant="outlined" onChange={handleChange}
+      />
+      <Spacer height="5vh" />
+      <Button
+        type="submit"
+        variant="outlined"
+        size="large"
+        color="primary"
+      >
+        Refresh
+      </Button>
+      <FireworksButton onSubmit={handleSubmit}/>
+    </form>
+  )
+}
+
+function FireworksButton(props) {
+  const [activeFireworks, setActiveFireworks] = useState(get.fireworks());
+
+  function updateActiveFireworks(value) {
+    store.setItem(keys.fireworks, value);
+    setActiveFireworks(value);
+  }
+
+  function handleClick(event) {
+    event.preventDefault();
+
+    props.onSubmit(event);
+
+    const toggle = get.fireworks()? false: true;
+    updateActiveFireworks(toggle);
+
+  }
+
+  return (
+    <Button
+    variant={activeFireworks?"contained": "text"}
+    onClick={handleClick}
+    type="submit"
+    color="secondary"
+    >
+      {activeFireworks? "Turn off fireworks": "Refresh with fireworks"}
+    </Button>
+  )
+}
 
 /**
  * This is an app split into 3 equal columns with a form on the right side. This
@@ -101,7 +161,6 @@ function TitleForm(props) {
  * display.
  */
 function App() {
-  const classes = useStyles();
 
   // This controls the header on the display page
   const [title, setTitle] = useState('Faith Promise 2021');
@@ -114,16 +173,14 @@ function App() {
   // This is the number being displayed on the display page
   const [displayTotal, setDisplayTotal] = useState(0);
 
-  function updateDisplayTotal(value, precision) {
-    const total = parseFloat(value).toFixed(precision);
+  function updateDisplayTotal(value) {
+    const total = parseFloat(value).toFixed(storagePrecision);
     if (!isNaN(total)) {
       store.setItem(keys.displayTotal, total);
       setDisplayTotal(total);
     }
   }
 
-  // newTotal is the new total that has *not* been submitted to the display page
-  const [newTotal, setNewTotal] = useState('');
 
   // Code to run once component is loaded.  Runs once.
   useEffect(() => {
@@ -133,46 +190,6 @@ function App() {
     store.setItem(keys.displayTotal, displayTotal);
     store.setItem(keys.title, title);
   }, []); // eslint-disable-line
-
-
-  function FireworksButton() {
-    const [activeFireworks, setActiveFireworks] = useState(get.fireworks());
-
-    function updateActiveFireworks(value) {
-      store.setItem(keys.fireworks, value);
-      setActiveFireworks(value);
-    }
-
-    function handleClick(event) {
-      event.preventDefault();
-
-      updateDisplayTotal(newTotal, storagePrecision);
-
-      const toggle = get.fireworks()? false: true;
-      updateActiveFireworks(toggle);
-
-    }
-
-    return (
-      <Button
-      variant={activeFireworks?"contained": "text"}
-      onClick={handleClick}
-      type="submit"
-      color="secondary"
-      fullWidth>
-        {activeFireworks? "Turn off fireworks": "Refresh with fireworks"}
-      </Button>
-    )
-  }
-
-  function handleSubmit(event) {
-    event.preventDefault();
-    updateDisplayTotal(newTotal, storagePrecision);
-  }
-
-  function handleChange(event) {
-    setNewTotal(event.target.value);
-  }
 
 
   return (
@@ -190,18 +207,9 @@ function App() {
             <p>
               Displayed total: ${displayTotal}
             </p>
-            <form onSubmit={handleSubmit} autoComplete="off">
-              <div className={classes.text}>
-                <TextField id="display" label="New total"
-                  variant="outlined" onChange={handleChange}
-                />
-              </div>
-              <Button type="submit" color="primary" fullWidth>Refresh</Button>
-            </form>
-          </Paper>
-          <Spacer height="10vh"/>
-          <Paper>
-            <FireworksButton/>
+            <TotalForm
+              updateDisplayTotal={updateDisplayTotal}
+            />
           </Paper>
         </Grid>
         <Grid item xs={4}></Grid>
