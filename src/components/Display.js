@@ -3,15 +3,9 @@ import Odometer from 'react-odometerjs-no-prop-types';
 import 'odometer/themes/odometer-theme-default.css'
 
 import { FIREWORKS } from './fireworks';
+import {store, keys, get} from './database';
 
 import './Display.css';
-
-const store = localStorage;
-const keys = Object.freeze({
-  'displayTotal': 'displayTotal',
-  'title': 'title',
-  'fireworks': 'fireworks',
-})
 
 function Display() {
   const [displayTotal, setDisplayTotal] = useState(
@@ -25,23 +19,21 @@ function Display() {
   const [Fire, setFire] = useState(false);
 
   React.useEffect(() => {
-    // const node = document.getElementsByClassName('Display')[0];
-    let fire = store.getItem(keys.fireworks) === 'true'? true: false;
+    let fire = get.fireworks();
     let fireworks = undefined;
 
     setInterval(() => {
-      const c = store.getItem(keys.displayTotal);
-      if (c !== displayTotal) {
-        setDisplayTotal(c);
-      }
-
       setTitle(store.getItem(keys.title));
 
-      fire = store.getItem(keys.fireworks) === 'true'? true: false;
+      const currentTotal = store.getItem(keys.displayTotal);
+      if (currentTotal !== displayTotal) {
+        setDisplayTotal(currentTotal);
+      }
+
+      fire = get.fireworks();
       setFire(fire);
       if (fire) {
         console.log('fire');
-        // store.setItem(keys.fireworks, false);
 
         if (!fireworks) {
           fireworks = new FIREWORKS({full_screen: true});
