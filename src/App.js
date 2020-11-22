@@ -10,6 +10,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from '@reach/router';
 
+import { store, keys, get } from './components/database';
+
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
@@ -25,12 +27,7 @@ const useStyles = makeStyles({
   }
 })
 
-const store = localStorage;
-const keys = Object.freeze({
-  'displayTotal': 'displayTotal',
-  'title': 'title',
-  'fireworks': 'fireworks',
-})
+
 
 // Number of decimal places to parse
 const storagePrecision = 0;
@@ -43,6 +40,25 @@ const storagePrecision = 0;
 function Spacer({height}) {
   return (
     <div style={{height: height}}/>
+  )
+}
+
+function DisplayButton() {
+  const id = 'display-button';
+
+  function handleClick(event) {
+    event.preventDefault();
+    const el = document.getElementById(id);
+    const href = el.attributes.href.value;
+    window.open(href, "displayTab", "noreferrer");
+  }
+
+  return (
+    <Button id={id} size="large" variant="outlined"
+    component={Link} to="display"
+    onClick={handleClick}>
+      Show display
+    </Button>
   )
 }
 
@@ -61,79 +77,81 @@ function Spacer({height}) {
 function App() {
   const classes = useStyles();
 
-  const [displayTotal, setDisplayTotal] = useState(
-    store.getItem(keys.displayTotal) || (0).toFixed(storagePrecision)
-  );
-
+  // This controls the header on the display page
   const [title, setTitle] = useState('Faith Promise 2021');
-  useEffect(() => {
-    for (let key in keys) {
-      console.log('remove');
-      store.removeItem(key);
+
+  function updateTitle(value) {
+    store.setItem(keys.title, value);
+    setTitle(value);
+  }
+
+  // This is the number being displayed on the display page
+  const [displayTotal, setDisplayTotal] = useState(0);
+
+  function updateDisplayTotal(value, precision) {
+    const total = parseFloat(value).toFixed(precision);
+    if (!isNaN(total)) {
+      store.setItem(keys.displayTotal, total);
+      setDisplayTotal(total);
     }
-    store.setItem(keys.fireworks, false);
-  }, []);
+  }
 
-  React.useEffect(() => {
-    store.setItem(keys.displayTotal, displayTotal);
-    store.setItem(keys.title, title);
-  });
-
+  // newTotal is the new total that has *not* been submitted to the display page
   const [newTotal, setNewTotal] = useState('');
 
-  function FireworksButton() {
-    const [checked, setChecked] = useState(
-      store.getItem(keys.fireworks) === 'true'? true: false);
+  // Code to run once component is loaded.  Runs once.
+  useEffect(() => {
+    console.log('Initializing...');
 
-    function handleSubmit(event) {
+    store.setItem(keys.fireworks, false);
+    store.setItem(keys.displayTotal, displayTotal);
+    store.setItem(keys.title, title);
+  }, []); // eslint-disable-line
+
+
+
+  function FireworksButton() {
+    const [activeFireworks, setActiveFireworks] = useState(get.fireworks());
+
+    function updateActiveFireworks(value) {
+      store.setItem(keys.fireworks, value);
+      setActiveFireworks(value);
+    }
+
+    function handleClick(event) {
       event.preventDefault();
-      const total = parseFloat(newTotal).toFixed(storagePrecision);
-      if (!isNaN(total)) {
-        setDisplayTotal(total);
-      }
-      let trigger = store.getItem(keys.fireworks)
-      trigger = trigger === 'true'? false: true;
-      store.setItem(keys.fireworks, trigger);
-      setChecked(trigger);
+
+      updateDisplayTotal(newTotal, storagePrecision);
+
+      const toggle = get.fireworks()? false: true;
+      updateActiveFireworks(toggle);
+
     }
 
     return (
       <Button
-      variant={checked?"contained": "text"}
-      onClick={handleSubmit}
+      variant={activeFireworks?"contained": "text"}
+      onClick={handleClick}
       type="submit"
       color="secondary"
       fullWidth>
-        {checked? "Turn off fireworks": "Refresh with fireworks"}
+        {activeFireworks? "Turn off fireworks": "Refresh with fireworks"}
       </Button>
     )
   }
 
   function handleSubmit(event) {
     event.preventDefault();
-    const total = parseFloat(newTotal).toFixed(storagePrecision);
-    if (!isNaN(total)) {
-      setDisplayTotal(total);
-    }
+    updateDisplayTotal(newTotal, storagePrecision);
   }
 
   function handleChange(event) {
     setNewTotal(event.target.value);
   }
 
-  /**
-   * handleClick opens resource in a new tab
-   * @param {event} event click event
-   */
-  function handleClick(event) {
-    event.preventDefault();
-    const el = document.getElementById("display-button");
-    const href = el.attributes.href.value;
-    window.open(href, "displayTab", "noreferrer");
-  }
 
   function handleChangeTitle(event) {
-    setTitle(event.target.value);
+    updateTitle(event.target.value);
   }
 
   function handleSubmitTitle(event) {
@@ -143,11 +161,7 @@ function App() {
   return (
     <div className="App">
       <Spacer height="2vh"/>
-      <Button id="display-button" size="large" variant="outlined"
-      component={Link} to="display"
-      onClick={handleClick}>
-        Show display
-      </Button>
+      <DisplayButton />
       <Grid container className="App-body">
         <Grid item xs={4}></Grid>
         <Grid item xs={4}>
