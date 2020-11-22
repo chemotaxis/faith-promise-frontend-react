@@ -62,6 +62,32 @@ function DisplayButton() {
   )
 }
 
+function TitleForm(props) {
+  const classes = useStyles();
+
+  function handleChangeTitle(event) {
+    console.log('Change title');
+    props.updateMethod(event.target.value);
+  }
+
+  function handleSubmitTitle(event) {
+    event.preventDefault();
+  }
+
+  return (
+    <form onSubmit={handleSubmitTitle} autoComplete="off">
+      <TextField
+        value={props.value}
+        onChange={handleChangeTitle}
+        className={classes.text}
+        id="title"
+        label="Title"
+        variant="outlined"
+      />
+    </form>
+  )
+}
+
 
 /**
  * This is an app split into 3 equal columns with a form on the right side. This
@@ -109,7 +135,6 @@ function App() {
   }, []); // eslint-disable-line
 
 
-
   function FireworksButton() {
     const [activeFireworks, setActiveFireworks] = useState(get.fireworks());
 
@@ -150,14 +175,6 @@ function App() {
   }
 
 
-  function handleChangeTitle(event) {
-    updateTitle(event.target.value);
-  }
-
-  function handleSubmitTitle(event) {
-    event.preventDefault();
-  }
-
   return (
     <div className="App">
       <Spacer height="2vh"/>
@@ -167,12 +184,9 @@ function App() {
         <Grid item xs={4}>
           <Spacer height="15vh"/>
           <Paper>
-            <form onSubmit={handleSubmitTitle} autoComplete="off">
-              <TextField className={classes.text} id="title" label="Title"
-                variant="outlined" value={title}
-                onChange={handleChangeTitle}
-              />
-            </form>
+            <TitleForm
+              value={title}
+              updateMethod={updateTitle}/>
             <p>
               Displayed total: ${displayTotal}
             </p>
