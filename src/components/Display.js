@@ -47,7 +47,8 @@ function Display() {
         }
       }
     }, 500);
-  }, []);
+  }, []); // eslint-disable-line
+  // This array is empty because I only want to run this effect once.
 
 
   return (
