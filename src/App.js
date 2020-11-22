@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from '@reach/router';
 
 import Grid from '@material-ui/core/Grid';
@@ -8,12 +8,6 @@ import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 
 import './App.css';
-
-function Spacer({height}) {
-  return (
-    <div style={{height: height}}/>
-  )
-}
 
 const useStyles = makeStyles({
   text: {
@@ -26,10 +20,19 @@ const store = localStorage;
 const keys = Object.freeze({
   'displayTotal': 'displayTotal',
   'title': 'title',
+  'fireworks': 'fireworks',
 })
 
 // Number of decimal places to parse
 const storagePrecision = 0;
+
+function Spacer({height}) {
+  return (
+    <div style={{height: height}}/>
+  )
+}
+
+
 /**
  * This is an app split into 3 equal columns with a form on the right side. This
  * will eventually be split into components, but I'm just playing around at the
@@ -51,6 +54,13 @@ function App() {
   );
 
   const [title, setTitle] = useState('Faith Promise 2021');
+  useEffect(() => {
+    for (let key in keys) {
+      console.log('remove');
+      store.removeItem(key);
+    }
+    store.setItem(keys.fireworks, false);
+  }, []);
 
   React.useEffect(() => {
     store.setItem(keys.displayTotal, displayTotal);
@@ -58,6 +68,34 @@ function App() {
   });
 
   const [newTotal, setNewTotal] = useState('');
+
+  function FireworksButton() {
+    const [checked, setChecked] = useState(
+      store.getItem(keys.fireworks) === 'true'? true: false);
+
+    function handleSubmit(event) {
+      event.preventDefault();
+      const total = parseFloat(newTotal).toFixed(storagePrecision);
+      if (!isNaN(total)) {
+        setDisplayTotal(total);
+      }
+      let trigger = store.getItem(keys.fireworks)
+      trigger = trigger === 'true'? false: true;
+      store.setItem(keys.fireworks, trigger);
+      setChecked(trigger);
+    }
+
+    return (
+      <Button
+      variant={checked?"contained": "text"}
+      onClick={handleSubmit}
+      type="submit"
+      color="secondary"
+      fullWidth>
+        {checked? "Turn off fireworks": "Refresh with fireworks"}
+      </Button>
+    )
+  }
 
   /**
    * handleSubmit converts the form data into a new number for the current tally
@@ -131,6 +169,9 @@ function App() {
             </form>
           </Paper>
           <Spacer height="10vh"/>
+          <Paper>
+            <FireworksButton/>
+          </Paper>
         </Grid>
         <Grid item xs={4}></Grid>
       </Grid>
