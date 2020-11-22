@@ -55,8 +55,13 @@ function App() {
 
   const [title, setTitle] = useState('Faith Promise 2021');
   useEffect(() => {
+    for (let key in keys) {
+      console.log('remove');
+      store.removeItem(key);
+    }
     store.setItem(keys.fireworks, false);
   }, []);
+
   React.useEffect(() => {
     store.setItem(keys.displayTotal, displayTotal);
     store.setItem(keys.title, title);
