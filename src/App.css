@@ -2,17 +2,9 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-}
-
 .App-body {
   min-height: 60vh;
   display: flex;
   align-items: center;
   font-size: calc(10px + 2vmin);
-}
-
-.App-link {
-  color: #09d3ac;
 }
