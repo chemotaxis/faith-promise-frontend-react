@@ -19,6 +19,7 @@ function Display() {
   const [Fire, setFire] = useState(false);
 
   React.useEffect(() => {
+    document.title = 'Faith Promise: Display';
     let fire = get.fireworks();
     let fireworks = undefined;
 
