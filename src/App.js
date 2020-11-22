@@ -1,3 +1,12 @@
+/**
+ * This is a small web app that was originally created to display the total
+ * amount donated for a fundraiser called "Faith Promise".
+ *
+ *
+ * It consists of an "admin" page (this file) where the total can be updated.
+ * It also has buttons to open a "display" page that can be projected on a
+ * separate screen or monitor without showing the "admin" page.
+ */
 import React, { useEffect, useState } from 'react';
 import { Link } from '@reach/router';
 
@@ -26,6 +35,11 @@ const keys = Object.freeze({
 // Number of decimal places to parse
 const storagePrecision = 0;
 
+/**
+ * The Spacer component is used to add vertical space between other components.
+ *
+ * @param {Object} height a string specifying vertical height
+ */
 function Spacer({height}) {
   return (
     <div style={{height: height}}/>
@@ -45,7 +59,6 @@ function Spacer({height}) {
  * display.
  */
 function App() {
-  // This uses the fairly new React hook api for adding state variables.
   const classes = useStyles();
 
   // displayTotal is a string that holds
