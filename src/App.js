@@ -70,6 +70,8 @@ function App() {
   const [newTotal, setNewTotal] = useState('');
 
   function FireworksButton() {
+    const [checked, setChecked] = useState(
+      store.getItem(keys.fireworks) === 'true'? true: false);
 
     function handleSubmit(event) {
       event.preventDefault();
@@ -80,11 +82,17 @@ function App() {
       let trigger = store.getItem(keys.fireworks)
       trigger = trigger === 'true'? false: true;
       store.setItem(keys.fireworks, trigger);
+      setChecked(trigger);
     }
 
     return (
-      <Button onClick={handleSubmit} type="submit" color="primary" fullWidth>
-        Fireworks!
+      <Button
+      variant={checked?"contained": "text"}
+      onClick={handleSubmit}
+      type="submit"
+      color="secondary"
+      fullWidth>
+        {checked? "Turn off fireworks": "Refresh with fireworks"}
       </Button>
     )
   }
