@@ -35,7 +35,7 @@ const storagePrecision = 0;
 /**
  * The Spacer component is used to add vertical space between other components.
  *
- * @param {Object} height a string specifying vertical height
+ * height (string): vertical height of spacer component
  */
 function Spacer({height}) {
   return (
@@ -43,6 +43,9 @@ function Spacer({height}) {
   )
 }
 
+/**
+ * DisplayButton opens a new tab to display a tally total and title
+ */
 function DisplayButton() {
   const id = 'display-button';
 
@@ -62,6 +65,12 @@ function DisplayButton() {
   )
 }
 
+/**
+ * TitleForm updates the title on the display page
+ *
+ * It updates display page on change.  Submit event is disabled.
+ *
+ */
 function TitleForm(props) {
 
   function handleChangeTitle(event) {
@@ -86,8 +95,18 @@ function TitleForm(props) {
   )
 }
 
+/**
+ * TotalForm updates the total being displayed on the display page
+ *
+ * The total on the display page won't be updated until a submit event is fired.
+ * It provides two buttons: one to just submit the new total; the other button
+ * toggles fireworks which can be used for the final total.  It will also update
+ * the total when submitted.
+ *
+ */
 function TotalForm(props) {
   const classes = useStyles();
+
   // newTotal is the new total that has *not* been submitted to the display page
   const [newTotal, setNewTotal] = useState('');
 
@@ -119,6 +138,12 @@ function TotalForm(props) {
   )
 }
 
+/**
+ * FireworksButton provides a button for toggling fireworks
+ *
+ * The button text and style will change depending on whether the fireworks are
+ * active or not.
+ */
 function FireworksButton(props) {
   const [activeFireworks, setActiveFireworks] = useState(get.fireworks());
 
@@ -150,15 +175,10 @@ function FireworksButton(props) {
 }
 
 /**
- * This is an app split into 3 equal columns with a form on the right side. This
- * will eventually be split into components, but I'm just playing around at the
- * moment.
+ * App provides an "admin" page to update the values on the Display page
  *
- * When the form submits, state variables are updated and then an alert displays
- * the state variables.
- *
- * The form will eventually send its contents to a different webpage for
- * display.
+ * This app is split into three columns.  Everything is centered in the second
+ * column.
  */
 function App() {
 
@@ -182,7 +202,7 @@ function App() {
   }
 
 
-  // Code to run once component is loaded.  Runs once.
+  // Code to run once component is loaded.
   useEffect(() => {
     console.log('Initializing...');
 
@@ -190,6 +210,7 @@ function App() {
     store.setItem(keys.displayTotal, displayTotal);
     store.setItem(keys.title, title);
   }, []); // eslint-disable-line
+  // Runs once.
 
 
   return (

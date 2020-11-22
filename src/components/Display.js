@@ -7,6 +7,11 @@ import {store, keys, get} from './database';
 
 import './Display.css';
 
+/**
+ * Display provides a page that displays a title and number
+ *
+ * The number has an odometer animation to transition between different totals.
+ */
 function Display() {
   const [displayTotal, setDisplayTotal] = useState(
     store.getItem(keys.displayTotal) || 0
