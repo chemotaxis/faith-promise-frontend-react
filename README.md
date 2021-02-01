@@ -6,6 +6,27 @@ This is a web app to display and update the fundraising total.  There is an
 "admin" page that contains a form to update the display.  There's also a
 "display" page that can be put on a separate screen to display the total.
 
+## User instructions
+
+The "admin" page has a button at the top, "Show display".  This opens the
+"display" page in a separate browser tab.  You can move this tab to a different
+display to be projected to an audience.
+
+The "admin" page has a form for changing the title and total on the "display"
+page.
+
+The title is updated automatically whenever a new title is typed.
+
+The total can be updated by pressing `Enter` while the new total form is
+selected. The "Refresh" button will do the same thing.  On each update, the
+"display" page will run a scrolling animation between the old number and the new
+number.
+
+For added effect (i.e. a final grand total), you can update with fireworks using
+the "Refresh with fireworks" button.  In addition to the scrolling animation,
+the background darkens to show fireworks.  The fireworks will continue until you
+press the "Turn off fireworks" button.
+
 ## Development
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
