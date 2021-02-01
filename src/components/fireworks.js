@@ -1,3 +1,5 @@
+// Code copied from https://codepen.io/nuton0413/pen/QWNgzKO
+// It has been modified slightly from the original.
 import * as PIXI from 'pixi.js';
 
 export function handleFireworks(params) {
